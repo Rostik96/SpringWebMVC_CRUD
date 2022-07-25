@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -22,5 +23,11 @@ public class PeopleController {
         System.out.println("readAllPerson");
         model.addAttribute("people", personDAO.readAllPerson());
         return "people/index";
+    }
+
+    @GetMapping("/{id}")
+    public String readPersonById(@ModelAttribute("id") int id, Model model) {
+        model.addAttribute("person", personDAO.readPersonById(id));
+        return "people/show";
     }
 }

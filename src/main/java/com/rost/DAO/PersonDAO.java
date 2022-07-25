@@ -12,14 +12,29 @@ import java.util.List;
 @Component
 public class PersonDAO {
     private final JdbcTemplate jdbcTemplate;
+    private int currentMaxId;
 
     @Autowired
     public PersonDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        currentMaxId = jdbcTemplate.queryForObject("SELECT max(id) FROM person", Integer.class);
+    }
+
+
+
+    private final BeanPropertyRowMapper<Person> personMapper = new BeanPropertyRowMapper<>(Person.class);
+
+    public void createPerson(Person person) {
+        jdbcTemplate.update("INSERT INTO person VALUES(?, ?, ?, ?, ?)", ++currentMaxId, person.getFirstName(), person.getLastName(), person.getAge(), person.getEmail());
     }
 
     public List<Person> readAllPerson() {
-        jdbcTemplate.query("SELECT * FROM person", new BeanPropertyRowMapper<>(Person.class)).forEach(System.out::println);
-        return jdbcTemplate.query("SELECT * FROM person", new BeanPropertyRowMapper<>(Person.class));
+        return jdbcTemplate.query("SELECT * FROM person", personMapper);
+    }
+
+    public Person readPersonById(int id) {
+        return jdbcTemplate.query("", new Object[]{id}, personMapper).stream()
+                .findAny()
+                .orElse(null);
     }
 }
