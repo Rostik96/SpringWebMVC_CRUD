@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -26,7 +27,7 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}")
-    public String readPersonById(@ModelAttribute("id") int id, Model model) {
+    public String readPersonById(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", personDAO.readPersonById(id));
         return "people/show";
     }

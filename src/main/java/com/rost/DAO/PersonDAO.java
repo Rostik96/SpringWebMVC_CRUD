@@ -33,7 +33,7 @@ public class PersonDAO {
     }
 
     public Person readPersonById(int id) {
-        return jdbcTemplate.query("", new Object[]{id}, personMapper).stream()
+        return jdbcTemplate.query("SELECT * FROM person WHERE id = ?", new Object[]{id}, personMapper).stream()
                 .findAny()
                 .orElse(null);
     }
