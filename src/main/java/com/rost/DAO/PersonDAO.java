@@ -18,6 +18,7 @@ public class PersonDAO {
     public PersonDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         currentMaxId = jdbcTemplate.queryForObject("SELECT max(id) FROM person", Integer.class);
+        System.out.println("currentMaxId = " + currentMaxId);
     }
 
 
@@ -25,6 +26,7 @@ public class PersonDAO {
     private final BeanPropertyRowMapper<Person> personMapper = new BeanPropertyRowMapper<>(Person.class);
 
     public void createPerson(Person person) {
+        System.out.printf("%d %s %s %d %s%n", ++currentMaxId, person.getFirstName(), person.getLastName(), person.getAge(), person.getEmail());
         jdbcTemplate.update("INSERT INTO person VALUES(?, ?, ?, ?, ?)", ++currentMaxId, person.getFirstName(), person.getLastName(), person.getAge(), person.getEmail());
     }
 
