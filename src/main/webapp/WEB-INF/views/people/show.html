@@ -9,5 +9,9 @@
 <p th:text="${person.getFullName()}">full name</p>
 <p th:text="${'age: ' + person.getAge()}">age</p>
 <p th:text="${'Email: ' + person.getEmail()}">email</p>
+<br/>
+<form th:method = "GET" th:action="@{/people/edit}" th:object="person">
+  <input type="submit" value="Edit">
+</form>
 </body>
 </html>

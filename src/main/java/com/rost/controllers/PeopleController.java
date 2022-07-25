@@ -45,4 +45,17 @@ public class PeopleController {
         model.addAttribute("person", personDAO.readPersonById(id));
         return "people/show";
     }
+
+    @GetMapping("/edit")
+    public String updatePerson(@ModelAttribute("person") Person person) {
+        return "people/edit";
+    }
+
+    @PatchMapping()
+    public String updatePerson(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return "people/edit";
+        personDAO.updatePerson(person);
+        return "people/index";
+    }
 }
