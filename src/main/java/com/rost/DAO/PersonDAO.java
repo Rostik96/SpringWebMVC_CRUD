@@ -26,7 +26,6 @@ public class PersonDAO {
     private final BeanPropertyRowMapper<Person> personMapper = new BeanPropertyRowMapper<>(Person.class);
 
     public void createPerson(Person person) {
-        System.out.printf("%d %s %s %d %s%n", ++currentMaxId, person.getFirstName(), person.getLastName(), person.getAge(), person.getEmail());
         jdbcTemplate.update("INSERT INTO person VALUES(?, ?, ?, ?, ?)", ++currentMaxId, person.getFirstName(), person.getLastName(), person.getAge(), person.getEmail());
     }
 
@@ -38,5 +37,10 @@ public class PersonDAO {
         return jdbcTemplate.query("SELECT * FROM person WHERE id = ?", new Object[]{id}, personMapper).stream()
                 .findAny()
                 .orElse(null);
+    }
+
+    public void updatePerson(Person person) {
+        jdbcTemplate.update("UPDATE person SET first_name = ?, last_name = ?, age = ?, email = ? WHERE id = ?",
+                person.getFirstName(), person.getLastName(), person.getAge(), person.getEmail(), person.getId());
     }
 }

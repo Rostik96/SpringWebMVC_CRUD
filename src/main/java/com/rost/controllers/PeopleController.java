@@ -46,8 +46,10 @@ public class PeopleController {
         return "people/show";
     }
 
-    @GetMapping("/edit")
-    public String updatePerson(@ModelAttribute("person") Person person) {
+    @GetMapping("/edit/{id}")
+    public String updatePerson(@PathVariable("id") int id, Model model) {
+        System.out.println("updatePerson");
+        model.addAttribute("person", personDAO.readPersonById(id));
         return "people/edit";
     }
 
@@ -56,6 +58,6 @@ public class PeopleController {
         if (bindingResult.hasErrors())
             return "people/edit";
         personDAO.updatePerson(person);
-        return "people/index";
+        return "people/show";
     }
 }
