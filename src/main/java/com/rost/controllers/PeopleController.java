@@ -2,7 +2,7 @@ package com.rost.controllers;
 
 import com.rost.DAO.PersonDAO;
 import com.rost.models.Person;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +35,6 @@ public class PeopleController {
 
     @GetMapping()
     public String readAllPerson(Model model) {
-        System.out.println("readAllPerson");
         model.addAttribute("people", personDAO.readAllPerson());
         return "people/index";
     }
@@ -59,5 +58,11 @@ public class PeopleController {
             return "people/edit";
         personDAO.updatePerson(person);
         return "people/show";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deletePerson(@PathVariable("id") int id) {
+        personDAO.deletePerson(id);
+        return "redirect:/people";
     }
 }

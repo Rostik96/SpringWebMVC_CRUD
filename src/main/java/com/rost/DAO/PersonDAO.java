@@ -18,7 +18,6 @@ public class PersonDAO {
     public PersonDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         currentMaxId = jdbcTemplate.queryForObject("SELECT max(id) FROM person", Integer.class);
-        System.out.println("currentMaxId = " + currentMaxId);
     }
 
 
@@ -42,5 +41,9 @@ public class PersonDAO {
     public void updatePerson(Person person) {
         jdbcTemplate.update("UPDATE person SET first_name = ?, last_name = ?, age = ?, email = ? WHERE id = ?",
                 person.getFirstName(), person.getLastName(), person.getAge(), person.getEmail(), person.getId());
+    }
+
+    public void deletePerson(int id) {
+        jdbcTemplate.update("DELETE FROM person WHERE id = ?", id);
     }
 }

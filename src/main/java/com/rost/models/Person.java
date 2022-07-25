@@ -1,9 +1,9 @@
 package com.rost.models;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,19 +13,19 @@ import lombok.ToString;
 @ToString
 public class Person {
     private int id;
-    
-    @NotEmpty
-    @Size(min = 2, max = 30, message = "First name should be correct")
+
+    @NotEmpty(message = "The first name cannot be empty")
+    @Size(min = 1, max = 30, message = "First name should be correct")
     private String firstName;
 
-    @NotEmpty
+    @NotEmpty(message = "The last name cannot be empty")
     @Size(min = 2, max = 30, message = "Last name should be correct")
     private String lastName;
 
     @Min(value = 0, message = "Age should be equals or greater than 0")
     private int age;
 
-    @NotEmpty
+    @NotEmpty(message = "The email cannot be empty")
     @Email(message = "Email should be valid")
     private String email;
 

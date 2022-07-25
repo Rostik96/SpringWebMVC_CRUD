@@ -13,8 +13,13 @@
   <input type="submit" value="Edit"/>
 </form>
 <br/>
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+  <input type="submit" value="Delete">
+</form>
+<hr/>
 <form th:method="GET" th:action="@{/people}">
   <input type="submit" value="Show people"/>
 </form>
+
 </body>
 </html>
