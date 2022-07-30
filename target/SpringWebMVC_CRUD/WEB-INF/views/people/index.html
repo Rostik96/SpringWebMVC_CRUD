@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+    <div th:each="person : ${people}">
+        <a th:href="@{/people/{id}(id=${person.getId()})}"
+                th:text="${person.getFullName()}">user</a>
+    </div>
+    <br/>
+    <form th:type="GET" th:action="@{/people/new}">
+        <input type="submit" value="Create new person">
+    </form>
+    <hr/>
+    <form th:type="GET" th:action="@{/test-batch-update}">
+        <input type="submit" value="Test batch update">
+    </form>
+</body>
+</html>

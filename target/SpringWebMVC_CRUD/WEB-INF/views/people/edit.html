@@ -1,0 +1,31 @@
+<DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>edit</title>
+</head>
+<body>
+<form th:method="PATCH" th:action = "@{/people}" th:object="${person}">
+    <input type="hidden" th:field="*{id}" th:value="${person.getId()}"/>
+    <a th:text="'id: ' + ${person.getId()}"/>
+    <br/>
+    <label for="firstName">First name: </label>
+    <input type="text" th:field="*{firstName}" id="firstName"/>
+    <div style="color:red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">first name error</div>
+    <br/>
+    <label for="lastName">Last name: </label>
+    <input type="text" th:field="*{lastName}" id="lastName"/>
+    <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">last name error</div>
+    <br/>
+    <label for="age">Age: </label>
+    <input type="text" th:field="*{age}" id="age"/>
+    <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">age error</div>
+    <br/>
+    <label for="email">Email: </label>
+    <input type="email" th:field="*{email}" id="email"/>
+    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</div>
+    <br/>
+    <input type="submit" value="Update">
+</form>
+</body>
+</html>
