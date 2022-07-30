@@ -4,15 +4,17 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+
+import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor()
 @ToString
 public class Person {
     private int id;
+
+    public Person() {}
 
     @NotEmpty(message = "The first name cannot be empty")
     @Size(min = 1, max = 30, message = "First name should be correct")
@@ -31,5 +33,16 @@ public class Person {
 
     public String getFullName() {
         return getFirstName() + " " + getLastName();
+    }
+
+    public Object[] getFieldsForCreate() {
+        return new Object[]{id, firstName, lastName, age, email};
+    }
+    public Object[] getFieldsForCreate(int id) {
+        return new Object[]{id, firstName, lastName, age, email};
+    }
+
+    public Object[] getFieldsForUpdate() {
+        return new Object[]{firstName, lastName, age, email, id};
     }
 }

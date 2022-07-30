@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<form th:action="@{/test-batch-update/without}">
+    <input type="submit" value="Create list of people&#x00A;without batch update&#x00A;x1000">
+</form>
+<br/>
+<form th:action="@{/test-batch-update/with}">
+    <input type="submit" value="Create list of people&#x00A;with batch update">
+</form>
+</body>
+</html>
