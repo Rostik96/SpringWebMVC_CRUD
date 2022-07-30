@@ -35,11 +35,11 @@ public class Person {
         return getFirstName() + " " + getLastName();
     }
 
-    public Object[] getFieldsForCreate() {
+    public Object[] getFieldsForCreateWithID() {
         return new Object[]{id, firstName, lastName, age, email};
     }
-    public Object[] getFieldsForCreate(int id) {
-        return new Object[]{id, firstName, lastName, age, email};
+    public Object[] getFieldsForCreate() {
+        return new Object[]{firstName, lastName, age, email};
     }
 
     public Object[] getFieldsForUpdate() {
