@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class PersonDAO {
@@ -22,10 +22,10 @@ public class PersonDAO {
     private int currentMaxID;
 
     private void updateCurrentMaxID() {
-        currentMaxID = jdbcTemplate.queryForObject("SELECT max(id) FROM person", Integer.class);
+        currentMaxID = getCurrentMaxID();
     }
     private int getCurrentMaxID() {
-        currentMaxID = jdbcTemplate.queryForObject("SELECT max(id) FROM person", Integer.class);
+        currentMaxID = Objects.requireNonNullElse(jdbcTemplate.queryForObject("SELECT max(id) FROM person", Integer.class), 0);
         return currentMaxID;
     }
 
@@ -37,14 +37,13 @@ public class PersonDAO {
     @Autowired
     public PersonDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-
+        alterSequenceForPerson_id();
     }
 
 
     private final BeanPropertyRowMapper<Person> personMapper = new BeanPropertyRowMapper<>(Person.class);
 
     public void createPerson(Person person) {
-        alterSequenceForPerson_id();
         jdbcTemplate.update("INSERT INTO person(first_name, last_name, age, email) VALUES(?, ?, ?, ?)", person.getFieldsForCreate());
     }
 
@@ -52,10 +51,15 @@ public class PersonDAO {
         return jdbcTemplate.query("SELECT * FROM person ORDER BY id", personMapper);
     }
 
-    public Person readPersonById(int id) {
+    public Person readPersonById(int id) { //stream'ы появлись в Java 8
         return jdbcTemplate.query("SELECT * FROM person WHERE id = ?", new Object[]{id}, personMapper).stream()
                 .findAny()
                 .orElse(null);
+    }
+
+    public Optional<Person> readPersonByEmail(String email) {
+        return jdbcTemplate.query("SELECT * FROM person WHERE email = ?", new Object[]{email}, personMapper).stream()
+                .findAny();
     }
 
     public void updatePerson(Person person) {
@@ -64,6 +68,7 @@ public class PersonDAO {
 
     public void deletePerson(int id) {
         jdbcTemplate.update("DELETE FROM person WHERE id = ?", id);
+        alterSequenceForPerson_id();
     }
 
     //Testing performance of batch update
