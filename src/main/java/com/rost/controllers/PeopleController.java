@@ -40,6 +40,7 @@ public class PeopleController {
 
     @GetMapping()
     public String readAllPerson(Model model) {
+        System.out.println("readAllPerson");
         model.addAttribute("people", personDAO.readAllPerson());
         return "people/index";
     }

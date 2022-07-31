@@ -26,6 +26,7 @@ public class PersonDAO {
     }
     private int getCurrentMaxID() {
         currentMaxID = Objects.requireNonNullElse(jdbcTemplate.queryForObject("SELECT max(id) FROM person", Integer.class), 0);
+        System.out.printf("currentMaxID = %d%n", currentMaxID);
         return currentMaxID;
     }
 
@@ -44,11 +45,13 @@ public class PersonDAO {
     private final BeanPropertyRowMapper<Person> personMapper = new BeanPropertyRowMapper<>(Person.class);
 
     public void createPerson(Person person) {
-        jdbcTemplate.update("INSERT INTO person(first_name, last_name, age, email) VALUES(?, ?, ?, ?)", person.getFieldsForCreate());
+        jdbcTemplate.update("INSERT INTO person(first_name, last_name, age, email, address) VALUES(?, ?, ?, ?, ?)", person.getFieldsForCreate());
     }
 
     public List<Person> readAllPerson() {
-        return jdbcTemplate.query("SELECT * FROM person ORDER BY id", personMapper);
+        List<Person> result = jdbcTemplate.query("SELECT * FROM person ORDER BY id", personMapper);
+        System.out.println(result);
+        return result;
     }
 
     public Person readPersonById(int id) { //stream'ы появлись в Java 8
@@ -63,7 +66,7 @@ public class PersonDAO {
     }
 
     public void updatePerson(Person person) {
-        jdbcTemplate.update("UPDATE person SET first_name = ?, last_name = ?, age = ?, email = ? WHERE id = ?", person.getFieldsForUpdate());
+        jdbcTemplate.update("UPDATE person SET first_name = ?, last_name = ?, address = ?, age = ?, email = ? WHERE id = ?", person.getFieldsForUpdate());
     }
 
     public void deletePerson(int id) {
@@ -78,7 +81,7 @@ public class PersonDAO {
         long before = System.currentTimeMillis();
         alterSequenceForPerson_id();
         for (Person person : people) {
-            jdbcTemplate.update("INSERT INTO person(first_name, last_name, age, email) VALUES (?, ?, ?, ?)", person.getFieldsForCreate());
+            jdbcTemplate.update("INSERT INTO person(first_name, last_name, age, email, address) VALUES (?, ?, ?, ?, ?)", person.getFieldsForCreate());
         }
         long after = System.currentTimeMillis();
         System.out.printf("Time = %ds%n", (after - before) / 1000);
@@ -88,7 +91,7 @@ public class PersonDAO {
         List<Person> people = create1000Person();
         long before = System.currentTimeMillis();
         alterSequenceForPerson_id();
-        jdbcTemplate.batchUpdate("INSERT INTO person(first_name, last_name, age, email) VALUES (?, ?, ?, ?)", new BatchPreparedStatementSetter() {
+        jdbcTemplate.batchUpdate("INSERT INTO person(first_name, last_name, age, email, address) VALUES (?, ?, ?, ?, ?)", new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setString(1, people.get(i).getFirstName());
@@ -110,7 +113,7 @@ public class PersonDAO {
         List<Person> people = new ArrayList<>(1000);
         int currentMaxId = getCurrentMaxID();
         for (int i = 0; i < 1000; i++) {
-            people.add(new Person(++currentMaxId, "SomeFirstName#" + i, "SomeLastName#" + i, 322, "testEmail" + i + "@mail.ru"));
+            people.add(new Person(++currentMaxId, "SomeFirstName#" + i, "SomeLastName#" + i, "someAddress", 322, "testEmail" + i + "@mail.ru"));
         }
         return people;
     }

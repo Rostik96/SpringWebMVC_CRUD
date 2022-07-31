@@ -1,9 +1,6 @@
 package com.rost.models;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 import lombok.*;
 
@@ -24,6 +21,10 @@ public class Person {
     @Size(min = 2, max = 30, message = "Last name should be correct")
     private String lastName;
 
+    //Structure: Country, City, postal code(6 digits).
+    @Pattern(regexp = "[A-Z]\\w+, [A-Z]\\w+, \\d{6}", message = "Your address should be in this format: Country, City, postal code(6 digits)")
+    private String address;
+
     @Min(value = 0, message = "Age should be equals or greater than 0")
     private int age;
 
@@ -35,14 +36,14 @@ public class Person {
         return getFirstName() + " " + getLastName();
     }
 
-    public Object[] getFieldsForCreateWithID() {
-        return new Object[]{id, firstName, lastName, age, email};
+    public Object[] getFieldsForCreateWithID(int id) {
+        return new Object[]{id, firstName, lastName, address, age, email};
     }
     public Object[] getFieldsForCreate() {
-        return new Object[]{firstName, lastName, age, email};
+        return new Object[]{firstName, lastName, age, email, address};
     }
 
     public Object[] getFieldsForUpdate() {
-        return new Object[]{firstName, lastName, age, email, id};
+        return new Object[]{firstName, lastName, address, age, email, id};
     }
 }
